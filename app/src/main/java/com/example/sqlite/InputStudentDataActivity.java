@@ -4,22 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
 
 public class InputStudentDataActivity extends AppCompatActivity {
     EditText full_name,address,personal_number,home_number,first_parent,second_parent,first_parent_number,second_parent_number;
     AlertDialog.Builder adb;
+    SQLiteDatabase db;
+    HelperDB hlp;
+    ContentValues cv;
+    Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_student_data);
         initAll();
+        hlp = new HelperDB(this);
+        db = hlp.getWritableDatabase();
+        db.close();
+        cv = new ContentValues();
     }
 
 
@@ -67,9 +81,28 @@ public class InputStudentDataActivity extends AppCompatActivity {
         adb.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                cv.clear();
+                cv.put(Student.NAME,full_name.getText().toString());
+                cv.put(Student.ADDRESS,address.getText().toString());
+                cv.put(Student.PERSONAL_PHONE_NUMBER,personal_number.getText().toString());
+                cv.put(Student.HOME_PHONE_NUMBER,home_number.getText().toString());
+                cv.put(Student.PARENT_1_NAME,first_parent.getText().toString());
+                cv.put(Student.PARENT_2_NAME,second_parent.getText().toString());
+                cv.put(Student.PARENT_1_PHONE_NUMBER,first_parent_number.getText().toString());
+                cv.put(Student.PARENT_2_PHONE_NUMBER,second_parent_number.getText().toString());
+                db = hlp.getWritableDatabase();
+                db.insert(Student.TABLE_STUDENTS, null, cv);
+                db.close();
+                Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
             }
         })
+        ;
+        adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
         AlertDialog ad = adb.create();
         ad.show();
     }
