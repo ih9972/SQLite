@@ -39,12 +39,12 @@ public class HelperDB extends SQLiteOpenHelper {
         strCreate+=" ("+KEY_ID+" INTEGER PRIMARY KEY,";
         strCreate+=" "+NAME+" TEXT,";
         strCreate+=" "+ADDRESS+" TEXT,";
-        strCreate+=" "+PERSONAL_PHONE_NUMBER+" INTEGER,";
-        strCreate+=" "+HOME_PHONE_NUMBER+" INTEGER,";
+        strCreate+=" "+PERSONAL_PHONE_NUMBER+" TEXT,";
+        strCreate+=" "+HOME_PHONE_NUMBER+" TEXT,";
         strCreate+=" "+PARENT_1_NAME+" TEXT,";
         strCreate+=" "+PARENT_2_NAME+" TEXT,";
-        strCreate+=" "+PARENT_1_PHONE_NUMBER+" INTEGER";
-        strCreate+=" "+PARENT_2_PHONE_NUMBER+" INTEGER";
+        strCreate+=" "+PARENT_1_PHONE_NUMBER+" TEXT,";
+        strCreate+=" "+PARENT_2_PHONE_NUMBER+" TEXT";
         strCreate+=");";
         db.execSQL(strCreate);
         strCreate="CREATE TABLE "+TABLE_SCORES;

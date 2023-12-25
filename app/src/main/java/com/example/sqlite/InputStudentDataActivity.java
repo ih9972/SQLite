@@ -72,38 +72,45 @@ public class InputStudentDataActivity extends AppCompatActivity {
             Intent si = new Intent(this, com.example.sqlite.CreditsActivity.class);
             startActivity(si);
         }
+        if (st.equals("Student data")){
+            Intent si = new Intent(this, com.example.sqlite.ShowStudentActivity.class);
+            startActivity(si);
+        }
         return super.onOptionsItemSelected(item);
     }
 
     public void save_student_data(View view) {
-        adb = new AlertDialog.Builder(this);
-        adb.setTitle("Save changes?");
-        adb.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cv.clear();
-                cv.put(Student.NAME,full_name.getText().toString());
-                cv.put(Student.ADDRESS,address.getText().toString());
-                cv.put(Student.PERSONAL_PHONE_NUMBER,personal_number.getText().toString());
-                cv.put(Student.HOME_PHONE_NUMBER,home_number.getText().toString());
-                cv.put(Student.PARENT_1_NAME,first_parent.getText().toString());
-                cv.put(Student.PARENT_2_NAME,second_parent.getText().toString());
-                cv.put(Student.PARENT_1_PHONE_NUMBER,first_parent_number.getText().toString());
-                cv.put(Student.PARENT_2_PHONE_NUMBER,second_parent_number.getText().toString());
-                db = hlp.getWritableDatabase();
-                db.insert(Student.TABLE_STUDENTS, null, cv);
-                db.close();
-                Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
-            }
-        })
-        ;
-        adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog ad = adb.create();
-        ad.show();
-    }
+        if (!(full_name.getText().toString().isEmpty() )){
+            adb = new AlertDialog.Builder(this);
+            adb.setTitle("Save changes?");
+            adb.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cv.clear();
+                    cv.put(Student.NAME,full_name.getText().toString());
+                    cv.put(Student.ADDRESS,address.getText().toString());
+                    cv.put(Student.PERSONAL_PHONE_NUMBER,personal_number.getText().toString());
+                    cv.put(Student.HOME_PHONE_NUMBER,home_number.getText().toString());
+                    cv.put(Student.PARENT_1_NAME,first_parent.getText().toString());
+                    cv.put(Student.PARENT_2_NAME,second_parent.getText().toString());
+                    cv.put(Student.PARENT_1_PHONE_NUMBER,first_parent_number.getText().toString());
+                    cv.put(Student.PARENT_2_PHONE_NUMBER,second_parent_number.getText().toString());
+                    db = hlp.getWritableDatabase();
+                    db.insert(Student.TABLE_STUDENTS, null, cv);
+                    db.close();
+                    Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
+                }
+            })
+            ;
+            adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog ad = adb.create();
+            ad.show();
+        }
+        else Toast.makeText(context, "Fill The Name Field", Toast.LENGTH_SHORT).show();
+}
 }

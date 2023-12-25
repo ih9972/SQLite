@@ -6,19 +6,11 @@
         android:title="Student data"
         android:orderInCategory="100"/>
 
-    <item
-        android:id="@+id/Show_student_scores"
-        android:title="Student scores"
-        android:orderInCategory="140"/>
 
     <item
         android:id="@+id/Enter_student_data"
         android:title="Edit student data"
         android:orderInCategory="120"/>
-    <item
-        android:id="@+id/Enter_student_scores"
-        android:title="Edit student scores"
-        android:orderInCategory="130"/>
 
     <item
         android:id="@+id/Credits"
