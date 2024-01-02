@@ -7,6 +7,7 @@ import static com.example.sqlite.Scores.SCORE_KEY_ID;
 import static com.example.sqlite.Scores.SUBJECT;
 import static com.example.sqlite.Scores.TABLE_SCORES;
 import static com.example.sqlite.Scores.TYPE;
+import static com.example.sqlite.Student.ACTIVE;
 import static com.example.sqlite.Student.ADDRESS;
 import static com.example.sqlite.Student.HOME_PHONE_NUMBER;
 import static com.example.sqlite.Student.KEY_ID;
@@ -37,6 +38,7 @@ public class HelperDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         strCreate="CREATE TABLE "+TABLE_STUDENTS;
         strCreate+=" ("+KEY_ID+" INTEGER PRIMARY KEY,";
+        strCreate+=" "+ACTIVE+" INTEGER,";
         strCreate+=" "+NAME+" TEXT,";
         strCreate+=" "+ADDRESS+" TEXT,";
         strCreate+=" "+PERSONAL_PHONE_NUMBER+" TEXT,";

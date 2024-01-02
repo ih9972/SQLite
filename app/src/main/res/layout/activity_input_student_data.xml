@@ -374,7 +374,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="save_student_data"
-            android:text="Save" />
+            android:text="Save changes" />
     </LinearLayout>
 
     <Space

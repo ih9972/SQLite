@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/Show_student_data"
-        android:title="Student data"
-        android:orderInCategory="100"/>
+        android:title="Students List"
+        android:orderInCategory="130"/>
 
 
     <item
         android:id="@+id/Enter_student_data"
-        android:title="Edit student data"
+        android:title="Register student"
         android:orderInCategory="120"/>
 
     <item

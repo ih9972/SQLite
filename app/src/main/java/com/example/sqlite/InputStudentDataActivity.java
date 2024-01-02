@@ -10,11 +10,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class InputStudentDataActivity extends AppCompatActivity {
@@ -24,18 +27,41 @@ public class InputStudentDataActivity extends AppCompatActivity {
     HelperDB hlp;
     ContentValues cv;
     Context context = this;
-
+    boolean first;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_student_data);
         initAll();
+        first = true;
         hlp = new HelperDB(this);
         db = hlp.getWritableDatabase();
         db.close();
         cv = new ContentValues();
+
     }
 
+    @Override
+    protected void onResume() {
+        Log.d("got to on resume", ""+first);
+        if(!first){
+            Log.d("got to if", "why");
+            super.onResume();
+            ArrayList<String> data = getIntent().getStringArrayListExtra("the_data");
+            full_name.setText(data.get(0));
+            address.setText(data.get(1));
+            personal_number.setText(data.get(2));
+            home_number.setText(data.get(3));
+            first_parent.setText(data.get(4));
+            first_parent_number.setText(data.get(5));
+            second_parent.setText(data.get(6));
+            second_parent_number.setText(data.get(7));}
+        else{
+            Log.d("got to else", "good");
+            first = false;
+        }
+
+    }
 
     /**
      *
@@ -72,7 +98,7 @@ public class InputStudentDataActivity extends AppCompatActivity {
             Intent si = new Intent(this, com.example.sqlite.CreditsActivity.class);
             startActivity(si);
         }
-        if (st.equals("Student data")){
+        if (st.equals("Students List")){
             Intent si = new Intent(this, com.example.sqlite.ShowStudentActivity.class);
             startActivity(si);
         }
@@ -87,6 +113,7 @@ public class InputStudentDataActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cv.clear();
+                    cv.put(Student.ACTIVE,"1");
                     cv.put(Student.NAME,full_name.getText().toString());
                     cv.put(Student.ADDRESS,address.getText().toString());
                     cv.put(Student.PERSONAL_PHONE_NUMBER,personal_number.getText().toString());

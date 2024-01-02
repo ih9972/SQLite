@@ -25,11 +25,11 @@ public class CreditsActivity extends AppCompatActivity {
     }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         String st = item.getTitle().toString();
-        if (st.equals("Student data")) {
+        if (st.equals("Students List")) {
             Intent si = new Intent(this, com.example.sqlite.ShowStudentActivity.class);
             startActivity(si);
         }
-        if (st.equals("Edit student data")){
+        if (st.equals("Register student")){
             Intent si = new Intent(this, com.example.sqlite.InputStudentDataActivity.class);
             startActivity(si);
         }
