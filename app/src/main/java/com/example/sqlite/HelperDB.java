@@ -4,6 +4,7 @@ import static android.provider.Telephony.Carriers.PASSWORD;
 import static com.example.sqlite.Scores.QUARTER;
 import static com.example.sqlite.Scores.SCORE;
 import static com.example.sqlite.Scores.SCORE_KEY_ID;
+import static com.example.sqlite.Scores.STUDENT_SCORE_KEY_ID;
 import static com.example.sqlite.Scores.SUBJECT;
 import static com.example.sqlite.Scores.TABLE_SCORES;
 import static com.example.sqlite.Scores.TYPE;
@@ -49,15 +50,15 @@ public class HelperDB extends SQLiteOpenHelper {
         strCreate+=" "+PARENT_2_PHONE_NUMBER+" TEXT";
         strCreate+=");";
         db.execSQL(strCreate);
-        strCreate="CREATE TABLE "+TABLE_SCORES;
-        strCreate+=" ("+SCORE_KEY_ID+" INTEGER PRIMARY KEY,";
-        strCreate+=" "+SCORE+" INTEGER,";
-        strCreate+=" "+SUBJECT+" TEXT,";
-        strCreate+=" "+TYPE+" TEXT,";
-        strCreate+=" "+QUARTER+" TEXT";
-        strCreate+=");";
+        strCreate = "CREATE TABLE " + TABLE_SCORES;
+        strCreate += " (" + SCORE_KEY_ID + " INTEGER PRIMARY KEY,";
+        strCreate += " " + STUDENT_SCORE_KEY_ID + " INTEGER,";
+        strCreate += " " + SCORE + " INTEGER,";
+        strCreate += " " + SUBJECT + " TEXT,";
+        strCreate += " " + TYPE + " TEXT,";
+        strCreate += " " + QUARTER + " TEXT";
+        strCreate += ");";
         db.execSQL(strCreate);
-
     }
 
     @Override

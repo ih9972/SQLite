@@ -5,35 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ShowStudentDataActivity">
+    tools:context=".ShowScoresActivityActivity">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="0.8" />
 
     <ListView
         android:id="@+id/listview2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="14" />
+        android:layout_weight="10" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="0.8" />
 
     <Button
-        android:id="@+id/edit_data"
+        android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:onClick="Gotoinput"
-        android:text="Edit Data" />
+        android:layout_weight="1"
+        android:onClick="AddScore"
+        android:text="Add Score" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
+        android:layout_weight="0.8" />
 </LinearLayout>

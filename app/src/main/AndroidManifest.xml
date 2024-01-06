@@ -13,10 +13,13 @@
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".ShowStudentDataActivity"
+            android:name=".InputScoreActivity"
             android:exported="false" />
         <activity
-            android:name=".ShowStudentScoresActivity"
+            android:name=".ShowScoresActivityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShowStudentDataActivity"
             android:exported="false" />
         <activity
             android:name=".ShowStudentActivity"
