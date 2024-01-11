@@ -42,7 +42,7 @@ public class InputStudentDataActivity extends AppCompatActivity {
     ContentValues cv;
     Context context = this;
     Cursor crsr;
-    String id;
+    int id;
     boolean edit = false;
 
     @Override
@@ -75,9 +75,9 @@ public class InputStudentDataActivity extends AppCompatActivity {
         super.onStart();
         Intent gi = getIntent();
         boolean fromedit = gi.getBooleanExtra("from edit", false);
-        if (fromedit) {
-            id = gi.getStringExtra("the_id");
-            selectionArgs[0] = id;
+        id = gi.getIntExtra("the_id",-1);
+        if (fromedit && id != -1) {
+            selectionArgs[0] = ""+id;
             db = hlp.getReadableDatabase();
             crsr = db.query(TABLE, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
             int col1 = crsr.getColumnIndex(Student.NAME);
@@ -156,12 +156,15 @@ public class InputStudentDataActivity extends AppCompatActivity {
                         db.insert(Student.TABLE_STUDENTS, null, cv);
                         db.close();
                         Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
+
                     }
                     else {
                         db.update(Student.TABLE_STUDENTS, cv, Student.KEY_ID + "=?", new String[]{"" + id});
                         db.close();
                         Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                     }
+                    Intent si = new Intent(context, ShowStudentActivity.class);
+                    startActivity(si);
                 }
             });
             adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {

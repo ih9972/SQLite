@@ -25,17 +25,28 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
     HelperDB hlp;
     ContentValues cv;
     Context context = this;
-    String id_student;
+    int id_student;
+    int id_score;
     ArrayAdapter<String> adp_subject;
     ArrayAdapter<String> adp_type;
     ArrayAdapter<String> adp_quarter;
-
+    String tableName = Scores.TABLE_SCORES;
+    String[] columns = {Scores.SCORE,Scores.TYPE,Scores.QUARTER,Scores.SUBJECT,Scores.SCORE_KEY_ID};
+    String selection = Scores.SCORE_KEY_ID +"=?";
+    String[] selectionArgs = {"someValue"};
+    String groupBy = null;
+    String having = null;
+    String orderBy = null;
+    String limit = null;
     String [] subjects = {"english", "math", "cyber", "history"};
     String [] type_assignment = {"test", "homework", "project","examination"};
     String [] quarters = {"1","2","3","4"};
     String quarter =quarters[0]
             ,type=type_assignment[0],subject=subjects[0];
     Intent gi;
+    Cursor crsr;
+    boolean edit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +70,33 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
         SubjectSpinner.setOnItemSelectedListener(this);
         TypeSpinner.setOnItemSelectedListener(this);
         gi = getIntent();
-        id_student = gi.getStringExtra("id");
+        id_student = gi.getIntExtra("the_id",-1);
+    }
+
+    protected void onStart() {
+        super.onStart();
+        if (gi.getBooleanExtra("edit", false)) {
+            id_score = gi.getIntExtra("the_score_id",-1);
+            selectionArgs[0] = ""+id_score;
+            db = hlp.getReadableDatabase();
+            crsr = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+            int col1 = crsr.getColumnIndex(Scores.SCORE);
+            int col2 = crsr.getColumnIndex(Scores.QUARTER);
+            int col3 = crsr.getColumnIndex(Scores.SUBJECT);
+            int col4 = crsr.getColumnIndex(Scores.TYPE);
+            crsr.moveToFirst();
+            while (!crsr.isAfterLast()) {
+                scoreText.setText(crsr.getString(col1));
+                type = crsr.getString(col4);
+                quarter = crsr.getString(col2);
+                subject = crsr.getString(col3);
+                crsr.moveToNext();
+            }
+            crsr.close();
+            db.close();
+            edit = true;
+        }
+        else edit = false;
     }
 
     public void initAll() {
@@ -77,20 +114,25 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     cv.clear();
-                    cv.put(Scores.STUDENT_SCORE_KEY_ID,id_student);
-                    cv.put(Scores.QUARTER,quarter);
-                    cv.put(Scores.SUBJECT,subject);
-                    cv.put(Scores.TYPE,type);
-                    cv.put(Scores.SCORE,Integer.parseInt(scoreText.getText().toString()));
+                    cv.put(Scores.STUDENT_SCORE_KEY_ID, id_student);
+                    cv.put(Scores.QUARTER, quarter);
+                    cv.put(Scores.SUBJECT, subject);
+                    cv.put(Scores.TYPE, type);
+                    cv.put(Scores.SCORE, Integer.parseInt(scoreText.getText().toString()));
                     db = hlp.getWritableDatabase();
-                    db.insert(Scores.TABLE_SCORES, null, cv);
-                    db.close();
-                    Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
-                    Intent si = new Intent(context,ShowScoresActivityActivity.class);
-                    si.putExtra("id",id_student);
-                    si.putExtra("frominput",true);
+                    if (!edit) {
+                        db.insert(Scores.TABLE_SCORES, null, cv);
+                        db.close();
+                        Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else {
+                        db.update(Scores.TABLE_SCORES, cv, Scores.SCORE_KEY_ID + "=?", new String[]{""});
+                        db.close();
+                        Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
+                    }
                     finish();
-            }
+                }
             });
             adb.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -102,7 +144,6 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
             ad.show();
         }
         else Toast.makeText(context, "Fill All The Fields", Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -121,5 +162,9 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    public void CancelScore(View view) {
+        finish();
     }
 }

@@ -32,7 +32,7 @@ public class ShowStudentDataActivity extends AppCompatActivity {
     String orderBy = null;
     String limit = null;
     Context context = this;
-    String id_student;
+    int id_student;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +43,7 @@ public class ShowStudentDataActivity extends AppCompatActivity {
                 androidx.appcompat.R.layout.support_simple_spinner_dropdown_item
                 , tbl);
         lv.setAdapter(adp);
-        id_student = getIntent().getStringExtra("id");
+        id_student = getIntent().getIntExtra("id",-1);
         reset();
     }
 
@@ -108,6 +108,7 @@ public class ShowStudentDataActivity extends AppCompatActivity {
         }
         if (st.equals("Students List")) {
             Intent si = new Intent(this,ShowStudentActivity.class);
+            si.putExtra("the_id", id_student);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);

@@ -27,7 +27,7 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
     Cursor crsr;
     ListView lv;
     ArrayList<String> tbl = new ArrayList<>();
-    ArrayList<String> ids_list = new ArrayList<>();
+    ArrayList<Integer> ids_list = new ArrayList<>();
     String TABLE = "Student";
     String[] columns = {Student.NAME, Student.ACTIVE, Student.KEY_ID};
     String selection =null;
@@ -38,7 +38,7 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
     String limit = null;
     Context context = this;
     ContentValues cv;
-    String id;
+    int id;
     ArrayAdapter<String> adp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
         }
         else if (action.equals("Activate/ Deactivate Student")){
             String selection =Student.KEY_ID +"=?";
-            String[] selectionArgs = {id};
+            String[] selectionArgs = {""+id};
             int temp=0;
             db = hlp.getReadableDatabase();
             crsr = db.query(TABLE, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
@@ -100,7 +100,7 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
         }
         else if(action.equals ("Student Score")){
             Intent si = new Intent(this, ShowScoresActivityActivity.class);
-            si.putExtra("id",id);
+            si.putExtra("the_id",id);
             startActivity(si);
         }
         return true;
@@ -148,7 +148,7 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
             if (crsr.getInt(col2) == 1) active="not active";
             else active="active";
             tbl.add("" + name_+" "+active);
-            ids_list.add("" + crsr.getInt(col3));
+            ids_list.add(crsr.getInt(col3));
             crsr.moveToNext();
         }
         crsr.close();
