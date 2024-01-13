@@ -31,8 +31,8 @@ public class ShowStudentDataActivity extends AppCompatActivity {
     String having = null;
     String orderBy = null;
     String limit = null;
-    Context context = this;
     int id_student;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +47,9 @@ public class ShowStudentDataActivity extends AppCompatActivity {
         reset();
     }
 
+    /**
+     * Update the list view
+     */
     public void reset() {
         selectionArgs[0] = ""+ id_student;
         db = hlp.getReadableDatabase();
@@ -114,6 +117,10 @@ public class ShowStudentDataActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * sends the user to the input data activity
+     * @param view
+     */
     public void Gotoinput(View view) {
         Intent si = new Intent(this, InputStudentDataActivity.class);
         si.putExtra("the_id", id_student);

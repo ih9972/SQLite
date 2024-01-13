@@ -57,6 +57,9 @@ public class InputStudentDataActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method resets all the input fields
+     */
     private void initAll() {
         full_name = (EditText) findViewById(R.id.name_et);
         address = (EditText) findViewById(R.id.address_et);
@@ -66,7 +69,6 @@ public class InputStudentDataActivity extends AppCompatActivity {
         second_parent = (EditText) findViewById(R.id.parent_2_name_et);
         first_parent_number = (EditText) findViewById(R.id.parent_1_phone_et);
         second_parent_number = (EditText) findViewById(R.id.parent_2_phone_et);
-
     }
 
 
@@ -134,6 +136,11 @@ public class InputStudentDataActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Saves the data from the input fields to the sql chart
+     * both input and edit data
+     * @param view
+     */
     public void save_student_data(View view) {
         if (!(full_name.getText().toString().isEmpty() )){
             adb = new AlertDialog.Builder(this);

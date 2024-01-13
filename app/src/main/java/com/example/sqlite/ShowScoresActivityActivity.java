@@ -60,6 +60,7 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
                 , sorts);
         sortespinner.setAdapter(sortespinneradp);
         sortespinner.setOnItemSelectedListener(this);
+        Toast.makeText(this, "Long tap to edit", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -72,9 +73,14 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
         update();
     }
 
+
+    /**
+     * Update the list view
+     */
     public void update(){
         if (id_student != -1){
             tbl.clear();
+            ids_list.clear();
             selectionArgs[0] = ""+id_student;
             db = hlp.getReadableDatabase();
             crsr = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
@@ -84,8 +90,8 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
             int col4 = crsr.getColumnIndex(Scores.TYPE);
             crsr.moveToFirst();
             while (!crsr.isAfterLast()) {
-                tbl.add("Subject: " + crsr.getString(col3) + " Type: " + crsr.getString(col4) +
-                        " Quarter: " + crsr.getString(col2) + " Score: " + crsr.getInt(col1));
+                tbl.add("" + crsr.getString(col3) + " " + crsr.getString(col4) +
+                        " Quarter " + crsr.getString(col2) + " - " + crsr.getInt(col1));
                 crsr.moveToNext();
             }
             crsr.close();
@@ -105,15 +111,20 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
     public boolean onContextItemSelected(MenuItem item) {
         String action=item.getTitle().toString();
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        if (ids_list.isEmpty() || info.position < 0 || info.position >= ids_list.size()) {return true;}
         score_id = ids_list.get(info.position);
         if (action.equals("Delete Score")){
-            /*Intent si = new Intent(this, com.example.sqlite.ShowStudentDataActivity.class);
-            si.putExtra("id",score_id);
-            startActivity(si);*/
+            db = hlp.getWritableDatabase();
+            db.delete(tableName, Scores.SCORE_KEY_ID + "=?", new String[]{Integer.toString(score_id)});
+            db.close();
+            adp.clear();
+            update();
+            adp.notifyDataSetChanged();
         }
         else if(action.equals("Edit Score")){
             Intent si = new Intent(this, InputScoreActivity.class);
             si.putExtra("the_score_id",score_id);
+            si.putExtra("the_id", id_student);
             si.putExtra("edit",true);
             startActivity(si);
         }
@@ -139,12 +150,16 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
         }
         if (st.equals("Students List")) {
             Intent si = new Intent(this,ShowStudentActivity.class);
-            si.putExtra("the_id", id_student);
             startActivity(si);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * this is called when the user clicks on the addscore button
+     * send the user to the input score activity
+     * @param view
+     */
     public void AddScore (View view){
         Intent si = new Intent(this, InputScoreActivity.class);
         si.putExtra("the_id", id_student);
@@ -162,25 +177,26 @@ public class ShowScoresActivityActivity extends AppCompatActivity implements Ada
             orderBy = "Score";
         }
         else orderBy = null;
-            selectionArgs[0] = ""+id_student;
-            tbl.clear();
-            db = hlp.getReadableDatabase();
-            crsr = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-            int col1 = crsr.getColumnIndex(Scores.SCORE);
-            int col2 = crsr.getColumnIndex(Scores.QUARTER);
-            int col3 = crsr.getColumnIndex(Scores.SUBJECT);
-            int col4 = crsr.getColumnIndex(Scores.TYPE);
-            int col5 = crsr.getColumnIndex(Scores.SCORE_KEY_ID);
+        selectionArgs[0] = ""+id_student;
+        tbl.clear();
+        ids_list.clear();
+        db = hlp.getReadableDatabase();
+        crsr = db.query(tableName, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        int col1 = crsr.getColumnIndex(Scores.SCORE);
+        int col2 = crsr.getColumnIndex(Scores.QUARTER);
+        int col3 = crsr.getColumnIndex(Scores.SUBJECT);
+        int col4 = crsr.getColumnIndex(Scores.TYPE);
+        int col5 = crsr.getColumnIndex(Scores.SCORE_KEY_ID);
         crsr.moveToFirst();
-            while (!crsr.isAfterLast()) {
-                tbl.add("Subject: "+ crsr.getString(col3)+" Type: "+crsr.getString(col4)+
-                        " Quarter: "+crsr.getString(col2)+" Score: "+crsr.getInt(col1));
-                ids_list.add(crsr.getInt(col5));
-                crsr.moveToNext();
-            }
-            crsr.close();
-            db.close();
-            adp.notifyDataSetChanged();
+        while (!crsr.isAfterLast()) {
+            tbl.add(""+ crsr.getString(col3)+" "+crsr.getString(col4)+
+                    " Quarter: "+crsr.getString(col2)+"-"+crsr.getInt(col1));
+            ids_list.add(crsr.getInt(col5));
+            crsr.moveToNext();
+        }
+        crsr.close();
+        db.close();
+        adp.notifyDataSetChanged();
     }
 
     @Override

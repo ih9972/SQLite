@@ -133,6 +133,9 @@ public class ShowStudentActivity extends AppCompatActivity implements AdapterVie
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Update the list view
+     */
     public void reset(){
         String name_;
         String active;

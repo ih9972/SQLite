@@ -90,6 +90,9 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
                 type = crsr.getString(col4);
                 quarter = crsr.getString(col2);
                 subject = crsr.getString(col3);
+                SubjectSpinner.setSelection(adp_subject.getPosition(crsr.getString(col3)));
+                TypeSpinner.setSelection(adp_type.getPosition(crsr.getString(col4)));
+                QurterSpinner.setSelection(adp_quarter.getPosition(crsr.getString(col2)));
                 crsr.moveToNext();
             }
             crsr.close();
@@ -99,6 +102,10 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
         else edit = false;
     }
 
+
+    /**
+     * This method resets all the input fields
+     */
     public void initAll() {
         scoreText = (EditText) findViewById(R.id.editTextNumber);
         SubjectSpinner = (Spinner) findViewById(R.id.spinner);
@@ -106,6 +113,12 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
         QurterSpinner = (Spinner) findViewById(R.id.spinner3);
     }
 
+
+    /**
+     * Saves the data from the input fields to the sql chart
+     * both input and edit data
+     * @param view
+     */
     public void SaveScore(View view) {
         if (!scoreText.getText().toString().isEmpty()){
             adb = new AlertDialog.Builder(this);
@@ -124,13 +137,15 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
                         db.insert(Scores.TABLE_SCORES, null, cv);
                         db.close();
                         Toast.makeText(context, "Data Saved", Toast.LENGTH_SHORT).show();
-
                     }
                     else {
-                        db.update(Scores.TABLE_SCORES, cv, Scores.SCORE_KEY_ID + "=?", new String[]{""});
+                        db.update(Scores.TABLE_SCORES, cv, Scores.SCORE_KEY_ID + "=?", new String[]{""+id_score});
                         db.close();
                         Toast.makeText(context, "Changes Saved", Toast.LENGTH_SHORT).show();
                     }
+                    Intent si = new Intent(context, ShowScoresActivityActivity.class);
+                    si.putExtra("the_id",id_student);
+                    startActivity(si);
                     finish();
                 }
             });
@@ -147,16 +162,26 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
 
     }
 
+
+    /**
+     * Called when the user clicks on the spinner and get the information
+     * @param parent The AdapterView where the selection happened
+     * @param view The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id The row id of the item that is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.spinner){
             subject = subjects[position];
         }
         if (parent.getId() == R.id.spinner2){
-            quarter = quarters[position];
+            type = type_assignment[position];
         }
         if (parent.getId() == R.id.spinner3){
-            type = type_assignment[position];
+
+            quarter = quarters[position];
+
         }
     }
 
@@ -164,6 +189,10 @@ public class InputScoreActivity extends AppCompatActivity implements AdapterView
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    /**
+     * closes the activity
+     * @param view
+     */
     public void CancelScore(View view) {
         finish();
     }
